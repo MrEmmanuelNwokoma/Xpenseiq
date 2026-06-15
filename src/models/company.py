@@ -8,7 +8,7 @@ from src.models.base import Base, Basemodel
 
 if TYPE_CHECKING:
     from src.models.category import Category
-    
+    from src.models.budget import Budget
     from src.models.expense import Expense
 
 
@@ -35,3 +35,4 @@ class Company(Basemodel, Base):
 
     expenses: Mapped[list["Expense"]] = relationship(back_populates="company", cascade="all, delete-orphan")
     
+    budgets: Mapped[list["Budget"]] = relationship(back_populates="company", cascade="all, delete-orphan")

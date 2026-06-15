@@ -13,7 +13,7 @@ class AuthService:
         self.token_utils= TokenUtils()
 
     
-    async def register_company(self,  company_data: AddCompany):
+    async def register_company(self, company_data: AddCompany):
         async with self.uow_factory as uow:
             company = await uow.company_repo.get_by_email(company_data.email)
             if company:

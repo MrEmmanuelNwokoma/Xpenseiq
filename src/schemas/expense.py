@@ -1,10 +1,12 @@
 from pydantic import BaseModel
+from decimal import Decimal
 
 
-class AddExpense(BaseModel):
+class LogExpenseSchema(BaseModel):
     company_id: str
-    employee_id: str
+    # employee_name: str
+    department: str
     category_id: str
     description: str
-    amount: str
+    amount: Decimal
  

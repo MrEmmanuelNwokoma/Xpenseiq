@@ -15,9 +15,11 @@ class LoginCompany(BaseModel):
 
 class CompanyProfile(BaseModel):
     id: str
-    first_name: str
-    last_name: str
+    name: str
     email: EmailStr
-    phone_number: str
     is_email_verified: bool
     last_login: datetime | None = None
+
+class UpdateCompany(BaseModel):
+    name: str
+    

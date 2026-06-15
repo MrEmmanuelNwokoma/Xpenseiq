@@ -1,4 +1,5 @@
 from typing import Type
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.repositories.base_repo import BaseRepository
 from src.models.company import Company
@@ -19,3 +20,6 @@ class CompanyRepository(BaseRepository[Company]):
         new_company = await self.create(company)
         return new_company
         
+    async def get_by_api_key(self, hashed_key: str):
+        result = await self.session.execute(select(self.model).where(self.model.api_key == hashed_key))
+        return result.scalar_one_or_none()

@@ -10,7 +10,7 @@ class Base(DeclarativeBase):
 
 class Basemodel:
     id: Mapped[str] = mapped_column(primary_key=True, default=lambda : str(uuid4()), nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone), nullable=False, default=datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone), nullable=False, default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone), nullable=True)
     
 
