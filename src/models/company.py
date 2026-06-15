@@ -22,7 +22,7 @@ class Company(Basemodel, Base):
     password: Mapped[str] = mapped_column(nullable=False)
     api_key: Mapped[str] = mapped_column(nullable=True)
     last_login: Mapped[str] = mapped_column(nullable=True)
-    is_email_verified: Mapped[bool] = mapped_column(nullable=True)
+    is_email_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
     verification_token: Mapped[str] = mapped_column(nullable=True)
     verification_token_expires_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),

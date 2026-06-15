@@ -2,7 +2,7 @@ from datetime import datetime, timezone, timedelta
 from src.unit_of_work.unit_of_work import UnitOfWork
 from src.auth.jwt import retrieve_token
 from src.auth.security import hash, verify
-from src.schemas.company import AddCompany, LoginCompany
+from src.schemas.company import AddCompany, LoginCompany, ReadCompanySchema
 from src.core.exceptions import EntityAlreadyExist, EntityNotFound, InvalidCredentialsError, InvalidResetTokenError
 from src.utils.token_utils import TokenUtils
 
@@ -23,12 +23,16 @@ class AuthService:
                         "recommendation": "Pass the correct credentials"
                     }
                 )
-            api_key = hash(self.token_utils.generate_key())
+            api_key = self.token_utils.generate_key()
+            hashed_api_key = hash(api_key)
             company_data.password = hash(company_data.password)
-            new_company = await uow.company_repo.add_company(company_data, api_key)
+            new_company = await uow.company_repo.add_company(company_data, hashed_api_key)
             verification_token = await self.token_utils.generate_company_verfication_token(new_company)
             print(verification_token)
-            return new_company
+            return{
+                "api_key": api_key,
+                "new_company": ReadCompanySchema.model_validate(new_company)
+            }
 
 
     async def login(self, login_details: LoginCompany):
