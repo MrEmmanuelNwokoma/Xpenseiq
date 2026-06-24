@@ -5,6 +5,7 @@ from src.auth.security import hash, verify
 from src.schemas.company import AddCompany, LoginCompany, ReadCompanySchema
 from src.core.exceptions import EntityAlreadyExist, EntityNotFound, InvalidCredentialsError, InvalidResetTokenError
 from src.utils.token_utils import TokenUtils
+from events.company_events import CompanyCreatedEvent
 
 
 class AuthService:
@@ -28,7 +29,13 @@ class AuthService:
             company_data.password = hash(company_data.password)
             new_company = await uow.company_repo.add_company(company_data, hashed_api_key)
             verification_token = await self.token_utils.generate_company_verfication_token(new_company)
-            print(verification_token)
+            await uow.collect_event(
+                CompanyCreatedEvent(
+                    name=new_company.name,
+                    verification_token=verification_token,
+                    email=new_company.email
+                )
+            )
             return{
                 "api_key": api_key,
                 "new_company": ReadCompanySchema.model_validate(new_company)
